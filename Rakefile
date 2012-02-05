@@ -9,6 +9,13 @@ Errbit::Application.load_tasks
 
 Rake::Task[:default].clear if Rake::Task.task_defined?(:default)
 
+begin
+  require 'vlad'
+  Vlad.load :scm => :git
+rescue LoadError
+  # do nothing
+end
+
 namespace :spec do
   desc "Preparing test env"
   task :prepare do

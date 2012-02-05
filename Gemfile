@@ -1,5 +1,9 @@
 source 'http://rubygems.org'
 
+# Nat's deployment gems
+gem 'vlad'
+gem 'vlad-git'
+
 gem 'rails', '3.2.11'
 gem 'mongoid', '~> 2.4.10'
 gem 'mongoid_rails_migrations'

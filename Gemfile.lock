@@ -316,7 +316,12 @@ GEM
       rack
       raindrops (~> 0.7)
     useragent (0.3.2)
-    warden (1.2.1)
+    vlad (2.2.4)
+      rake (~> 0.8)
+      rake-remote_task (~> 2.0)
+    vlad-git (2.2.0)
+      vlad (>= 2.1.0)
+    warden (1.0.5)
       rack (>= 1.0)
     webmock (1.8.7)
       addressable (>= 2.2.7)
@@ -381,6 +386,8 @@ DEPENDENCIES
   underscore-rails
   unicorn
   useragent (~> 0.3.1)
+  vlad
+  vlad-git
   webmock
   xmpp4r
   yajl-ruby
