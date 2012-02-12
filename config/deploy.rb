@@ -3,7 +3,7 @@ require "bundler/vlad"
 set :application, "sugarpond-errbit"
 set :user, "www-data"
 set :domain, "#{user}@spinoza.sugarpond.net"
-set :repository, "git://github.com/errbit/errbit"
+set :repository, "git://github.com/nbudin/errbit"
 set :deploy_to, "/var/www/#{application}"
 set :rvm_cmd, "source /etc/profile.d/rvm.sh"
 set :bundle_cmd, [ rvm_cmd, "bundle" ].join(" && ")
