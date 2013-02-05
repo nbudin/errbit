@@ -27,6 +27,12 @@ namespace :vlad do
   remote_task :copy_config_files, :roles => :app do
     run "cp #{shared_path}/config/* #{current_path}/config/"
   end
+
+  namespace :assets do
+    remote_task :precompile, :roles => :app do
+      run "cd #{release_path} && rake assets:precompile"
+    end
+  end
 end
 
 namespace :foreman do
@@ -52,5 +58,5 @@ namespace :foreman do
 end
 
 task "vlad:deploy" => %w[
-  vlad:update vlad:bundle:install vlad:copy_config_files vlad:cleanup
+  vlad:update vlad:bundle:install vlad:copy_config_files vlad:assets:precompile vlad:cleanup vlad:start_app
 ]
