@@ -16,11 +16,11 @@ namespace :vlad do
 
   namespace :assets do
     remote_task :precompile, :roles => :app do
-      run "cd #{release_path} && rake assets:precompile"
+      run "cd #{release_path} && #{rake_cmd} assets:precompile"
     end
   end
 end
 
 task "vlad:deploy" => %w[
-  vlad:update vlad:bundle:install vlad:copy_config_files vlad:assets:precompile vlad:cleanup vlad:start_app
+  vlad:update vlad:bundle:install vlad:copy_config_files vlad:migrate vlad:assets:precompile vlad:cleanup vlad:start_app
 ]
