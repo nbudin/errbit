@@ -11,7 +11,7 @@ Rake::Task[:default].clear if Rake::Task.task_defined?(:default)
 
 begin
   require 'vlad'
-  Vlad.load :scm => :git
+  Vlad.load :app => :passenger, :scm => :git
 rescue LoadError
   # do nothing
 end
