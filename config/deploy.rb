@@ -11,7 +11,7 @@ set :rake_cmd, "#{bundle_cmd} exec rake"
 
 namespace :vlad do
   remote_task :copy_config_files, :roles => :app do
-    run "cp #{shared_path}/config/* #{current_path}/config/"
+    run "cp -Rv #{shared_path}/config/* #{current_path}/config/"
   end
 
   namespace :assets do
