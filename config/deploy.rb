@@ -1,26 +1,47 @@
-require "bundler/vlad"
+require "bundler/capistrano"
+require "capistrano/chef"
+require "capistrano-rbenv"
 
-set :application, "sugarpond-errbit"
-set :user, "www-data"
-set :domain, "#{user}@popper.sugarpond.net"
+load "deploy/assets"
+
+default_run_options[:pty] = true
+
+chef_role [:web, :app], 'roles:app_server AND chef_environment:production'
+set :user, 'deploy'
+
+#role :web, 'localhost'
+#set :user, 'www-data'
+#set :ssh_options, {port: 2222, keys: ['~/.ssh/id_dsa']}
+
+set :rbenv_path, "/opt/rbenv"
+set :rbenv_setup_shell, false
+set :rbenv_setup_default_environment, false
+set :rbenv_setup_global_version, false
+set :rbenv_ruby_version, "1.9.3-p392"
+
+set :application, "sugarpond_errbit"
 set :repository, "git://github.com/nbudin/errbit"
 set :deploy_to, "/var/www/#{application}"
-set :rvm_cmd, nil #"source /etc/profile.d/rvm.sh"
-set :bundle_cmd, [ rvm_cmd, "env $(cat #{shared_path}/config/production.env) bundle" ].compact.join(" && ")
-set :rake_cmd, "#{bundle_cmd} exec rake"
+set :use_sudo, false
 
-namespace :vlad do
-  remote_task :copy_config_files, :roles => :app do
-    run "cp -Rv #{shared_path}/config/* #{current_path}/config/"
-  end
+set :scm, :git
+set :bundle_without, [:development, :test]
 
-  namespace :assets do
-    remote_task :precompile, :roles => :app do
-      run "cd #{release_path} && #{rake_cmd} assets:precompile"
+namespace(:deploy) do
+  desc "Link in config files needed for environment"
+  task :symlink_config, :roles => :app do
+    %w(config.yml initializers/secret_token.rb mongoid.yml).each do |config_file|
+      run <<-CMD
+        ln -nfs #{shared_path}/config/#{config_file} #{release_path}/config/#{config_file}
+      CMD
     end
+  end
+  
+  desc "Restart Application"
+  task :restart, :roles => :app do
+    run "touch #{current_path}/tmp/restart.txt"
   end
 end
 
-task "vlad:deploy" => %w[
-  vlad:update vlad:bundle:install vlad:copy_config_files vlad:migrate vlad:assets:precompile vlad:cleanup vlad:start_app
-]
+before "deploy:finalize_update", "deploy:symlink_config"
+after "deploy", "deploy:cleanup"
