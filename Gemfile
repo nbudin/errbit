@@ -1,21 +1,27 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
-gem 'rails', '3.2.11'
-gem 'mongoid', '~> 2.4.10'
+RAILS_VERSION = '~> 3.2.15'
+
+gem 'actionmailer', RAILS_VERSION
+gem 'actionpack', RAILS_VERSION
+gem 'railties', RAILS_VERSION
+
+gem 'mongoid'
+
 gem 'mongoid_rails_migrations'
-gem 'devise', '~> 1.5.4'
+gem 'devise'
 gem 'haml'
-gem 'htmlentities', "~> 4.3.0"
+gem 'htmlentities'
 gem 'rack-ssl', :require => 'rack/ssl'   # force SSL
 
-gem 'useragent', '~> 0.3.1'
-gem 'inherited_resources'
-gem 'SystemTimer', :platform => :ruby_18
-gem 'actionmailer_inline_css', "~> 1.3.0"
+gem 'useragent'
+gem 'decent_exposure'
+gem 'strong_parameters'
+gem 'actionmailer_inline_css'
 gem 'kaminari', '>= 0.14.1'
-gem 'rack-ssl-enforcer'
-gem 'fabrication', "~> 1.3.0"   # Used for both tests and demo data
-gem 'rails_autolink', '~> 1.0.9'
+gem 'rack-ssl-enforcer', :require => false
+gem 'fabrication'
+gem 'rails_autolink'
 # Please don't update hoptoad_notifier to airbrake.
 # It's for internal use only, and we monkeypatch certain methods
 gem 'hoptoad_notifier', "~> 2.4"
@@ -35,16 +41,18 @@ gem 'pivotal-tracker'
 # Fogbugz
 gem 'ruby-fogbugz', :require => 'fogbugz'
 # Github Issues
-gem 'octokit', '~> 1.0.0'
+gem 'octokit', '~> 1.18'
 # Gitlab
-gem 'gitlab', :git => 'git://github.com/NARKOZ/gitlab'
+gem 'gitlab', '~> 3.0.0'
 
 # Bitbucket Issues
-gem 'bitbucket_rest_api'
+gem 'bitbucket_rest_api', :require => false
+
+# Jira
+gem 'jira-ruby', :require => 'jira'
 
 # Notification services
 # ---------------------------------------
-# Campfire
 gem 'campy'
 # Hipchat
 gem 'hipchat'
@@ -56,51 +64,57 @@ gem 'hoi'
 gem 'rushover'
 # Hubot
 gem 'httparty'
+# Flowdock
+gem 'flowdock'
 
 # Authentication
 # ---------------------------------------
 # GitHub OAuth
 gem 'omniauth-github'
 
-
-platform :ruby do
-  gem 'mongo', '= 1.6.2'
-  gem 'bson', '= 1.6.2'
-  gem 'bson_ext', '= 1.6.2'
-end
-
 gem 'ri_cal'
 gem 'yajl-ruby', :require => "yajl"
 
 group :development, :test do
-  gem 'rspec-rails', '~> 2.6'
+  gem 'rspec-rails'
   gem 'webmock', :require => false
-  unless ENV["CI"]
-    gem 'ruby-debug', :platform => :mri_18
-    gem 'debugger', :platform => :mri_19
-    gem 'pry-rails'
-  end
+  gem 'airbrake', :require => false
+  gem 'ruby-debug', :platform => :mri_18
+  gem 'debugger', :platform => :mri_19
+  gem 'pry-rails'
 #  gem 'rpm_contrib'
 #  gem 'newrelic_rpm'
-  gem 'capistrano'
+  gem 'quiet_assets'
 end
 
-gem 'foreman', :group => :development
+group :development do
+  gem 'capistrano', '~> 2.0', :require => false
+
+  # better errors
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'meta_request'
+  gem 'foreman', :require => false
+
+  # Use puma for development
+  gem 'puma', :require => false
+
+end
 
 group :test do
   gem 'capybara'
   gem 'launchy'
-  gem 'database_cleaner', '~> 0.6.0'
+  gem 'database_cleaner'
   gem 'email_spec'
   gem 'timecop'
+  gem 'coveralls', :require => false
+  gem 'mongoid-rspec', :require => false
 end
 
 group :heroku, :production do
-  gem 'unicorn'
+  gem 'unicorn', :require => false
 end
 
-# Use thin for development
-gem 'thin', :group => :development, :platform => :ruby
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -108,6 +122,10 @@ group :assets do
   gem 'execjs'
   gem 'therubyracer', :platform => :ruby  # C Ruby (MRI) or Rubinius, but NOT Windows
   gem 'uglifier',     '>= 1.0.3'
+  # We can't upgrade because not compatible to jquery >= 1.9.
+  # To do that, we need fix the rails.js
+  gem 'jquery-rails', '~> 2.1.4'
+  gem 'pjax_rails'
   gem 'underscore-rails'
   gem 'turbo-sprockets-rails3'
 end

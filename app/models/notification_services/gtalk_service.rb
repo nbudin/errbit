@@ -1,6 +1,6 @@
 class NotificationServices::GtalkService < NotificationService
   Label = "gtalk"
-  Fields = [
+  Fields += [
       [:subdomain, {
           :placeholder => "username@example.com",
           :label       => "Username"
@@ -36,7 +36,7 @@ class NotificationServices::GtalkService < NotificationService
   end
 
   def url
-    "http://www.google.com/talk/" || service_url
+    service_url || "http://www.google.com/talk/"
   end
 
   def create_notification(problem)

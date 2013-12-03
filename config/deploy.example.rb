@@ -35,8 +35,7 @@ set :copy_compression, :bz2
 
 set :scm, :git
 set :scm_verbose, true
-set(:current_branch) { `git branch`.match(/\* (\S+)\s/m)[1] || raise("Couldn't determine current branch") }
-set :branch, defer { current_branch }
+set :branch, config['branch'] || 'master'
 
 before 'deploy:assets:symlink', 'errbit:symlink_configs'
 # if unicorn is started through something like runit (the tool which restarts the process when it's stopped)
@@ -70,7 +69,7 @@ namespace :errbit do
     release_configs = File.join(release_path,'config')
     run("ln -nfs #{shared_configs}/config.yml #{release_configs}/config.yml")
     run("ln -nfs #{shared_configs}/mongoid.yml #{release_configs}/mongoid.yml")
-    run("ln -nfs #{shared_configs}/secret_token.rb #{release_configs}/initializers/secret_token.rb")
+    run("ln -nfs #{shared_configs}/secret_token.rb #{release_configs}/initializers/__secret_token.rb")
   end
 end
 
