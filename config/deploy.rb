@@ -17,7 +17,7 @@ set :rbenv_path, "/opt/rbenv"
 set :rbenv_setup_shell, false
 set :rbenv_setup_default_environment, false
 set :rbenv_setup_global_version, false
-set :rbenv_ruby_version, "1.9.3-p392"
+set :rbenv_ruby_version, "1.9.3-p484"
 
 set :application, "sugarpond_errbit"
 set :repository, "git://github.com/nbudin/errbit"
