@@ -1,12 +1,14 @@
 require "bundler/capistrano"
-require "capistrano/chef"
 require "capistrano-rbenv"
 
 load "deploy/assets"
 
 default_run_options[:pty] = true
 
-chef_role [:web, :app], 'roles:app_server AND chef_environment:production'
+role :web, 'kant.sugarpond.net'
+role :app, 'kant.sugarpond.net'
+role :db, 'kant.sugarpond.net', primary: true
+#chef_role [:web, :app], 'roles:app_server AND chef_environment:production'
 set :user, 'deploy'
 
 #role :web, 'localhost'
@@ -30,7 +32,7 @@ set :bundle_without, [:development, :test]
 namespace(:deploy) do
   desc "Link in config files needed for environment"
   task :symlink_config, :roles => :app do
-    %w(config.yml initializers/secret_token.rb mongoid.yml).each do |config_file|
+    %w(config.yml initializers/secret_token.rb initializers/devise.rb mongoid.yml).each do |config_file|
       run <<-CMD
         ln -nfs #{shared_path}/config/#{config_file} #{release_path}/config/#{config_file}
       CMD
